@@ -1,0 +1,77 @@
+"use client";
+
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MainNav } from "@/components/main-nav";
+import { MobileNav } from "@/components/mobile-nav";
+import { useLanguage, languages, Language } from "@/contexts/language-context";
+import { Leaf, ChevronDown } from "lucide-react";
+
+const organizationName = {
+    en: "FFVEN",
+    ne: "FEFVEN",
+};
+
+export function SiteHeader() {
+    const { language, setLanguage } = useLanguage();
+
+    return (
+        <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div className="container flex h-16 items-center">
+                <Link href="/" className="flex items-center space-x-2 mr-6">
+                    <Leaf className="h-6 w-6 text-primary" />
+                    <span className="font-bold text-xl text-primary">
+                        {organizationName[language]}
+                    </span>
+                </Link>
+                <div className="hidden md:flex md:flex-1">
+                    <MainNav />
+                </div>
+                <div className="flex items-center space-x-4 ml-auto">
+                    <div className="hidden md:flex items-center space-x-4">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" size="sm">
+                                    {
+                                        languages.find(
+                                            (lang) => lang.code === language
+                                        )?.name
+                                    }
+                                    <ChevronDown className="ml-2 h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                {languages.map((lang) => (
+                                    <DropdownMenuItem
+                                        key={lang.code}
+                                        onClick={() =>
+                                            setLanguage(lang.code as Language)
+                                        }
+                                    >
+                                        {lang.name}
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                        <Button
+                            variant="default"
+                            size="sm"
+                            className="bg-accent text-accent-foreground hover:bg-accent/90"
+                        >
+                            {language === "en"
+                                ? "Contact Us"
+                                : "सम्पर्क गर्नुहोस्"}
+                        </Button>
+                    </div>
+                    <MobileNav />
+                </div>
+            </div>
+        </header>
+    );
+}

@@ -3,6 +3,7 @@
 import { useLanguage } from "@/contexts/language-context"
 import Link from "next/link"
 import { Facebook, Twitter, Instagram } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 
 const content = {
   en: {
@@ -31,6 +32,9 @@ const content = {
 
 export function SiteFooter() {
   const { language } = useLanguage()
+  const pathname = usePathname()
+
+  if (pathname.startsWith('/admin')) return null
 
   return (
     <footer className="bg-secondary text-secondary-foreground py-12">

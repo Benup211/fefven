@@ -43,17 +43,17 @@ const slides = {
   ],
   ne: [
     {
-      image: "/placeholder.svg?height=600&width=1200",
+      image: "http://localhost:3001/uploads/images/1737215648351-856504548-bg.jpg",
       title: "नेपालको फलफूल र तरकारी उद्योगलाई सशक्त बनाउँदै",
       description: "कृषिमा दिगो विकास र नवीनता प्रवर्द्धन गर्ने हाम्रो मिशनमा सामेल हुनुहोस्।",
     },
     {
-      image: "/placeholder.svg?height=600&width=1200",
+      image: "http://localhost:3001/uploads/images/1737215648351-856504548-bg.jpg",
       title: "किसानहरूलाई विश्व बजारसँग जोड्दै",
       description: "हामी स्थानीय किसानहरूलाई अन्तर्राष्ट्रिय उपभोक्तासम्म पुग्न मद्दत गर्न स्रोत र समर्थन प्रदान गर्दछौं।",
     },
     {
-      image: "/placeholder.svg?height=600&width=1200",
+      image: "http://localhost:3001/uploads/images/1737215648351-856504548-bg.jpg",
       title: "दिगो कृषि अभ्यासहरूको प्रवर्द्धन",
       description: "वातावरण मैत्री खेती विधिहरूलाई प्रोत्साहन गर्ने हाम्रा पहलहरूको बारेमा जान्नुहोस्।",
     },

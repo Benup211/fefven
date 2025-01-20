@@ -22,10 +22,50 @@ model carousel {
   updatedAt   DateTime @updatedAt
 }
 
-model gallery{
+model gallery {
+  id        Int      @id @default(autoincrement())
+  title     String
+  imageUrl  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model resource {
   id          Int      @id @default(autoincrement())
   title       String
+  description String
+  fileUrl     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model events {
+  id               Int      @id @default(autoincrement())
+  title            String
+  description      String
+  category         String
+  tags             String
+  startDate        String
+  endDate          String
+  startTime        String
+  endTime          String
+  venueName        String
+  venueAddress     String
+  city             String
+  organizerName    String
+  organizerContact String
+  organizerWebsite String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model news {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  author      String
   imageUrl    String
+  content     String   @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

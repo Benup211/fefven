@@ -5,7 +5,6 @@ import multer from "multer";
 const Imagestorage = multer.diskStorage({
     destination: (req, file, cb) => {
         const uploadDir = path.join(__dirname, "../../uploads/images");
-        console.log(uploadDir);
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir, { recursive: true });
         }
@@ -19,7 +18,7 @@ const Imagestorage = multer.diskStorage({
 
 const Filestorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadDir = path.join(__dirname, "uploads/files");
+        const uploadDir = path.join(__dirname, "../../uploads/files");
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir, { recursive: true });
         }
@@ -40,6 +39,14 @@ const imageUpload = multer({ storage: Imagestorage,
         }
     },
  });
-const fileUpload = multer({ storage: Filestorage });
+const fileUpload = multer({ storage: Filestorage,
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype === "application/pdf") {
+            cb(null, true);
+        } else {
+            cb(new Error("Only .pdf files are allowed"));
+        }
+    },
+ });
 
 export { imageUpload, fileUpload };

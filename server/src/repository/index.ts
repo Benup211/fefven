@@ -1,2 +1,5 @@
 export * from './carousel.repository'
 export * from './gallery.repository'
+export * from './resource.repository'
+export * from './events.repository'
+export * from './news.repository'

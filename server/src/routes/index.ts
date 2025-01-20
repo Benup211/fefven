@@ -1,2 +1,6 @@
 export * from './carousel.route'
 export * from './gallery.route'
+export * from './resource.route'
+export * from './events.route'
+export * from './news.route'
+export * from './dashboard.route'

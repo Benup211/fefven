@@ -52,4 +52,12 @@ export class GalleryRepository {
         }
     }
 
+    static async lengthOfGallery() {
+        try {
+            return await prisma.gallery.count();
+        } catch (e) {
+            throw new Error("Error while fetching length of gallery items from database");
+        }
+    }
+
 }

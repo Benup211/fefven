@@ -1,2 +1,6 @@
 export * from './carousel.controller'
 export * from './gallery.controller'
+export * from './resource.controller'
+export * from './events.controller'
+export * from './news.controller'
+export * from './dashboard.controller'

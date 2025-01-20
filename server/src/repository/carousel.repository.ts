@@ -64,4 +64,12 @@ export class CarouselRepository{
             throw new Error("Error while updating carousel item in database");
         }
     }
+
+    static async lengthOfCarousel(){
+        try{
+            return await prisma.carousel.count();
+        }catch (e){
+            throw new Error("Error while fetching length of carousel items from database");
+        }
+    }
 }

@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from "react"
 import { useLanguage } from "@/contexts/language-context"
-import Image from 'next/image'
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
@@ -15,32 +15,56 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Search, ZoomIn, Grid, Columns } from 'lucide-react'
-
-// Mock data for gallery images
-const galleryData = [
-  { id: 1, title: "Fruit Exhibition", src: "/placeholder.svg?height=300&width=400", alt: "Fruit Exhibition" },
-  { id: 2, title: "Vegetable Market", src: "/placeholder.svg?height=400&width=300", alt: "Vegetable Market" },
-  { id: 3, title: "Organic Farming", src: "/placeholder.svg?height=300&width=400", alt: "Organic Farming" },
-  { id: 4, title: "Harvest Festival", src: "/placeholder.svg?height=400&width=300", alt: "Harvest Festival" },
-  { id: 5, title: "Farmer's Workshop", src: "/placeholder.svg?height=300&width=400", alt: "Farmer's Workshop" },
-  { id: 6, title: "Agricultural Technology", src: "/placeholder.svg?height=400&width=300", alt: "Agricultural Technology" },
-  { id: 7, title: "Fruit Orchard", src: "/placeholder.svg?height=300&width=400", alt: "Fruit Orchard" },
-  { id: 8, title: "Vegetable Greenhouse", src: "/placeholder.svg?height=400&width=300", alt: "Vegetable Greenhouse" },
-  { id: 9, title: "Farmers Market", src: "/placeholder.svg?height=300&width=400", alt: "Farmers Market" },
-  { id: 10, title: "Irrigation Systems", src: "/placeholder.svg?height=400&width=300", alt: "Irrigation Systems" },
-  { id: 11, title: "Crop Harvesting", src: "/placeholder.svg?height=300&width=400", alt: "Crop Harvesting" },
-  { id: 12, title: "Sustainable Farming", src: "/placeholder.svg?height=400&width=300", alt: "Sustainable Farming" },
-]
+import { Search, ZoomIn, Grid, Columns } from "lucide-react"
+import useUserGalleryStore from "@/state/user/gallery-store"
 
 const itemsPerPage = 9
 
 export default function GalleryPage() {
   const { language } = useLanguage()
   const [currentPage, setCurrentPage] = useState(1)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedImage, setSelectedImage] = useState<{ id: number, title: string, src: string, alt: string } | null>(null)
-  const [layout, setLayout] = useState<'grid' | 'masonry'>('grid')
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedImage, setSelectedImage] = useState<{
+    id: number
+    title: string
+    imageUrl: string
+    createdAt: string
+    updatedAt: string
+  } | null>(null)
+  const [layout, setLayout] = useState<"grid" | "masonry">("masonry")
+  const { images, fetchImages } = useUserGalleryStore()
+  const isFetched = useRef(false)
+  const [galleryItems, setGalleryItems] = useState<
+    {
+      id: number
+      title: string
+      imageUrl: string
+      createdAt: string
+      updatedAt: string
+    }[]
+  >([])
+  const [loadingData, setLoadingData] = useState(true)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFetched.current) return
+      isFetched.current = true
+      try {
+        setLoadingData(true)
+        await fetchImages()
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setLoadingData(false)
+      }
+    }
+
+    fetchData()
+  }, [fetchImages])
+
+  useEffect(() => {
+    setGalleryItems(images)
+  }, [images])
 
   const content = {
     en: {
@@ -58,18 +82,13 @@ export default function GalleryPage() {
       close: "बन्द गर्नुहोस्",
       gridView: "ग्रिड दृश्य",
       masonryView: "मेसनरी दृश्य",
-    }
+    },
   }
 
-  const filteredImages = galleryData.filter(image =>
-    image.title.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const filteredImages = galleryItems.filter((image) => image.title.toLowerCase().includes(searchTerm.toLowerCase()))
 
   const totalPages = Math.ceil(filteredImages.length / itemsPerPage)
-  const paginatedImages = filteredImages.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  )
+  const paginatedImages = filteredImages.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
 
   const GridView = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -77,8 +96,9 @@ export default function GalleryPage() {
         <Card key={image.id} className="overflow-hidden cursor-pointer" onClick={() => setSelectedImage(image)}>
           <CardContent className="p-0 relative group">
             <Image
-              src={image.src || "/placeholder.svg"}
-              alt={image.alt}
+              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/images/${image.imageUrl}` || "/placeholder.svg"}
+              alt={image.title}
+              title={image.title}
               width={400}
               height={300}
               className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-110"
@@ -97,8 +117,9 @@ export default function GalleryPage() {
       {paginatedImages.map((image) => (
         <div key={image.id} className="mb-4 cursor-pointer" onClick={() => setSelectedImage(image)}>
           <Image
-            src={image.src || "/placeholder.svg"}
-            alt={image.alt}
+            src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/images/${image.imageUrl}` || "/placeholder.svg"}
+            alt={image.title}
+            title={image.title}
             width={400}
             height={300}
             className="w-full h-auto object-cover rounded-lg transition-transform duration-300 hover:scale-105"
@@ -107,6 +128,23 @@ export default function GalleryPage() {
       ))}
     </div>
   )
+
+  if (loadingData) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <h1 className="text-4xl font-bold text-center mb-8 text-primary">{content[language].title}</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[...Array(9)].map((_, index) => (
+            <Card key={index} className="overflow-hidden">
+              <CardContent className="p-0">
+                <div className="w-full h-64 bg-gray-200 animate-pulse"></div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -125,7 +163,7 @@ export default function GalleryPage() {
             />
           </div>
         </div>
-        <Tabs value={layout} onValueChange={(value: string) => setLayout(value as 'grid' | 'masonry')}>
+        <Tabs value={layout} onValueChange={(value: string) => setLayout(value as "grid" | "masonry")}>
           <TabsList>
             <TabsTrigger value="grid">
               <Grid className="mr-2" />
@@ -149,7 +187,7 @@ export default function GalleryPage() {
           </TabsContent>
         </Tabs>
       ) : (
-        <p className="text-center text-muted-foreground">{content[language].noResults}</p>
+        <p className="text-center text-primary text-xl underline">{content[language].noResults}</p>
       )}
 
       {totalPages > 1 && (
@@ -157,24 +195,21 @@ export default function GalleryPage() {
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                className={currentPage === 1 ? 'disabled' : ''}
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                className={currentPage === 1 ? "disabled" : ""}
               />
             </PaginationItem>
             {[...Array(totalPages)].map((_, i) => (
               <PaginationItem key={i}>
-                <PaginationLink
-                  onClick={() => setCurrentPage(i + 1)}
-                  isActive={currentPage === i + 1}
-                >
+                <PaginationLink onClick={() => setCurrentPage(i + 1)} isActive={currentPage === i + 1}>
                   {i + 1}
                 </PaginationLink>
               </PaginationItem>
             ))}
             <PaginationItem>
               <PaginationNext
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                className={currentPage === totalPages ? 'disabled' : ''}
+                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                className={currentPage === totalPages ? "disabled" : ""}
               />
             </PaginationItem>
           </PaginationContent>
@@ -185,17 +220,14 @@ export default function GalleryPage() {
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
           <div className="relative max-w-4xl w-full">
             <Image
-              src={selectedImage.src || "/placeholder.svg"}
-              alt={selectedImage.alt}
+              src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/images/${selectedImage.imageUrl}` || "/placeholder.svg"}
+              alt={selectedImage.title}
+              title={selectedImage.title}
               width={800}
               height={600}
               className="w-full h-auto object-contain"
             />
-            <Button
-              variant="secondary"
-              className="absolute top-4 right-4"
-              onClick={() => setSelectedImage(null)}
-            >
+            <Button variant="secondary" className="absolute top-4 right-4" onClick={() => setSelectedImage(null)}>
               {content[language].close}
             </Button>
           </div>

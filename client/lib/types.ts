@@ -12,3 +12,9 @@ export interface CarouselItem {
     description: string
     file: File | null
   }
+
+  export interface IErrorResponse {
+    status: number;
+    errorName: string;
+    errorMessage: string;
+}

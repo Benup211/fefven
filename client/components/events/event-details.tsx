@@ -8,20 +8,23 @@ import { useLanguage } from "@/contexts/language-context"
 
 interface EventDetailsProps {
   event: {
-    title: string
-    description: string
-    category: string
-    tags: string
-    startDate: string
-    startTime: string
-    endDate: string
-    endTime: string
-    venueName: string
-    venueAddress: string
-    city: string
-    organizerName: string
-    organizerContact: string
-    organizerWebsite: string
+    id: number;
+    title: string;
+    description: string;
+    category: string;
+    tags: string;
+    startDate: string;
+    startTime: string;
+    endDate: string;
+    endTime: string;
+    venueName: string;
+    venueAddress: string;
+    city: string;
+    organizerName: string;
+    organizerContact: string;
+    organizerWebsite?: string;
+    createdAt: string;
+    updatedAt: string;
   }
   onClose: () => void
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -8,13 +8,17 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
 import Link from '@tiptap/extension-link'
+import Youtube from '@tiptap/extension-youtube'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Bold, Italic, List, ListOrdered, LinkIcon, ImageIcon } from 'lucide-react'
+import { Bold, Italic, List, ListOrdered, LinkIcon, ImageIcon, YoutubeIcon } from 'lucide-react'
 import { Editor } from '@tiptap/react'
+import { useToast } from '@/hooks/use-toast'
+import { useRouter } from "next/navigation";
+import useNewsStore from '@/state/admin/news-store'
 
 const schema = yup.object().shape({
   title: yup.string().required('News title is required'),
@@ -22,7 +26,6 @@ const schema = yup.object().shape({
   author: yup.string().required('Author name is required'),
   content: yup.string().required('News content is required'),
 })
-
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
@@ -34,6 +37,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       <Button
         variant="outline"
         size="icon"
+        type="button"
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
         className={editor.isActive('bold') ? 'bg-accent' : ''}
@@ -43,6 +47,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       <Button
         variant="outline"
         size="icon"
+        type="button"
         onClick={() => editor.chain().focus().toggleItalic().run()}
         disabled={!editor.can().chain().focus().toggleItalic().run()}
         className={editor.isActive('italic') ? 'bg-accent' : ''}
@@ -52,6 +57,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       <Button
         variant="outline"
         size="icon"
+        type="button"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         disabled={!editor.can().chain().focus().toggleBulletList().run()}
         className={editor.isActive('bulletList') ? 'bg-accent' : ''}
@@ -61,6 +67,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       <Button
         variant="outline"
         size="icon"
+        type="button"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         disabled={!editor.can().chain().focus().toggleOrderedList().run()}
         className={editor.isActive('orderedList') ? 'bg-accent' : ''}
@@ -70,6 +77,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       <Button
         variant="outline"
         size="icon"
+        type="button"
         onClick={() => {
           const url = window.prompt('Enter the URL')
           if (url) {
@@ -85,6 +93,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       <Button
         variant="outline"
         size="icon"
+        type="button"
         onClick={() => {
           const url = window.prompt('Enter the image URL')
           if (url) {
@@ -94,29 +103,85 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       >
         <ImageIcon className="h-4 w-4" />
       </Button>
+      <Button
+        variant="outline"
+        size="icon"
+        type="button"
+        onClick={() => {
+          const url = window.prompt('Enter the YouTube video URL')
+          if (url) {
+            editor.commands.setYoutubeVideo({ src: url })
+          }
+        }}
+      >
+        <YoutubeIcon className="h-4 w-4" />
+      </Button>
     </div>
   )
 }
 
-export function NewsForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
+interface NewsFormState {
+  title: string;
+  description: string;
+  author: string;
+  image: File | null;
+  content: string;
+  imagePreview: string | null;
+}
 
-  const { register, handleSubmit, control, setValue, formState: { errors } } = useForm({
-    resolver: yupResolver(schema)
+export function NewsForm() {
+  const [formState, setFormState] = useState<NewsFormState>({
+    title: '',
+    description: '',
+    author: '',
+    image: null,
+    content: '',
+    imagePreview: null
+  })
+  const {toast} = useToast();
+  const router=useRouter();
+  const {isLoading,addNews}=useNewsStore();
+  const { register, handleSubmit, control, setValue, trigger, formState: { errors } } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      title: '',
+      description: '',
+      author: '',
+      content: '',
+    }
   })
 
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Image,
+      Image.configure({
+        HTMLAttributes: {
+          class: 'max-w-full h-auto',
+        },
+      }),
       Link.configure({
         openOnClick: false,
+      }),
+      Youtube.configure({
+        controls: true,
+        nocookie: true,
+        progressBarColor: 'white',
+        HTMLAttributes: {
+          class: 'w-full aspect-video',
+        },
       }),
     ],
     content: '',
     onUpdate: ({ editor }) => {
-      setValue('content', editor.getHTML())
+      const html = editor.getHTML()
+      setFormState(prev => ({ ...prev, content: html }))
+      setValue('content', html)
+      trigger('content')
+    },
+    editorProps: {
+      attributes: {
+        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none',
+      },
     },
   })
 
@@ -126,13 +191,28 @@ export function NewsForm() {
     }
   }, [editor])
 
-  const onSubmit = async (data:any) => {
-    setIsSubmitting(true)
-    // Here you would typically send the data to your backend
-    console.log(data)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    setIsSubmitting(false)
+  const onSubmit = async (data: any) => {
+    const response=await addNews(data.title,data.description,data.author,formState.image as File,data.content);
+    if(response.success){
+      toast({
+        title: 'News article created successfully',
+        description: 'The news article has been created successfully',
+      })
+      router.push('/admin/news')
+    }else{
+      toast({
+        title: 'Error creating news article',
+        description: response.error,
+        variant: 'destructive',
+      })
+    }
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormState(prev => ({ ...prev, [name]: value }))
+    setValue(name as "title" | "description" | "author", value)
+    trigger(name as "title" | "description" | "author")
   }
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -140,43 +220,74 @@ export function NewsForm() {
     if (file) {
       const reader = new FileReader()
       reader.onloadend = () => {
-        setImagePreview(reader.result as string)
+        setFormState(prev => ({
+          ...prev,
+          image: file,
+          imagePreview: reader.result as string
+        }))
       }
       reader.readAsDataURL(file)
     }
   }
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
+      event.preventDefault();
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+    <form onSubmit={handleSubmit(onSubmit)} onKeyDown={handleKeyDown} className="space-y-4">
       <Card>
         <CardHeader>
           <CardTitle>News Article Information</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-2">
           <div>
             <Label htmlFor="title">News Title</Label>
-            <Input id="title" {...register('title')} placeholder="Enter the news title" />
+            <Input
+              id="title"
+              {...register('title')}
+              value={formState.title}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Enter the news title"
+            />
             {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
           </div>
 
           <div>
             <Label htmlFor="description">News Description</Label>
-            <Textarea id="description" {...register('description')} placeholder="Enter a brief description" />
+            <Textarea
+              id="description"
+              {...register('description')}
+              value={formState.description}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Enter a brief description"
+            />
             {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>}
           </div>
 
           <div>
             <Label htmlFor="author">Author</Label>
-            <Input id="author" {...register('author')} placeholder="Enter the author's name" />
+            <Input
+              id="author"
+              {...register('author')}
+              value={formState.author}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Enter the author's name"
+            />
             {errors.author && <p className="text-red-500 text-sm mt-1">{errors.author.message}</p>}
           </div>
 
           <div>
             <Label htmlFor="image">News Image</Label>
             <Input id="image" type="file" accept="image/*" onChange={handleImageUpload} />
-            {imagePreview && (
+            {formState.imagePreview && (
               <div className="mt-2">
-                <img src={imagePreview || "/placeholder.svg"} alt="Preview" className="max-w-full h-auto max-h-48 object-contain" />
+                <img src={formState.imagePreview || "/placeholder.svg"} alt="Preview" className="max-w-full h-auto max-h-48 object-contain" />
               </div>
             )}
           </div>
@@ -190,7 +301,11 @@ export function NewsForm() {
                   name="content"
                   control={control}
                   render={({ field }) => (
-                    <EditorContent editor={editor} {...field} className="min-h-[200px] prose max-w-none" />
+                    <EditorContent 
+                      editor={editor} 
+                      {...field} 
+                      className="min-h-[200px] prose max-w-none focus:outline-none"
+                    />
                   )}
                 />
               </CardContent>
@@ -200,11 +315,48 @@ export function NewsForm() {
         </CardContent>
       </Card>
 
+      <div className="mt-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Live Preview</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div 
+              dangerouslySetInnerHTML={{ __html: formState.content }} 
+              className="prose max-w-none"
+            />
+          </CardContent>
+        </Card>
+      </div>
+
       <div className="flex justify-end">
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Submitting...' : 'Create News Article'}
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? 'Submitting...' : 'Create News Article'}
         </Button>
       </div>
+
+      <style jsx global>{`
+        .ProseMirror p.is-editor-empty:first-child::before {
+          color: #adb5bd;
+          content: attr(data-placeholder);
+          float: left;
+          height: 0;
+          pointer-events: none;
+        }
+        
+        .ProseMirror img, .ProseMirror iframe {
+          margin: 0.5em 0;
+        }
+
+        .ProseMirror p {
+          margin: 0;
+          line-height: 1.4;
+        }
+
+        .ProseMirror {
+          padding: 0.5rem;
+        }
+      `}</style>
     </form>
   )
 }

@@ -2,22 +2,25 @@ import { create } from "zustand";
 import axios, { AxiosError } from "axios";
 import getBackendUrl from "@/lib/get-backend-url";
 import { IErrorResponse } from "@/lib/types";
-interface GalleryImage {
+interface NewsProps {
     id: number;
     title: string;
+    description: string;
+    author: string;
+    content:string;
     imageUrl: string;
     createdAt: string;
     updatedAt: string;
 }
 
-interface GalleryStore {
-    images: GalleryImage[];
-    fetchImages: () => Promise<void>;
-    addImage: (title: string, file: File) => Promise<{
+interface NewsStore {
+    news: NewsProps[];
+    fetchNews: () => Promise<void>;
+    addNews: (title: string, description:string,author:string,file: File,content:string) => Promise<{
         success: boolean;
         error: string | null;
     }>;
-    deleteImage: (id: number) => Promise<{
+    deleteNews: (id: number) => Promise<{
         success: boolean;
         error: string | null;
     }>;
@@ -27,15 +30,15 @@ interface GalleryStore {
 
 const backendUrl = await getBackendUrl();
 
-const useGalleryStore = create<GalleryStore>((set) => ({
-    images: [],
+const useNewsStore = create<NewsStore>((set) => ({
+    news: [],
     isLoading: false,
     error: null,
-    fetchImages: async () => {
+    fetchNews: async () => {
         set({ isLoading: true });
         try {
-            const response = await axios.get(`${backendUrl}/api/gallery/all`);
-            set({ images: response.data, isLoading: false });
+            const response = await axios.get(`${backendUrl}/api/news/all`);
+            set({ news: response.data, isLoading: false });
         } catch (error) {
             const { response } = error as AxiosError<IErrorResponse>;
             set({
@@ -44,21 +47,24 @@ const useGalleryStore = create<GalleryStore>((set) => ({
             });
         }
     },
-    addImage: async (title: string, file: File) => {
+    addNews: async (title: string, description:string,author:string,file: File,content:string) => {
         set({ isLoading: true });
         try {
             const formData = new FormData();
             formData.append("title", title);
+            formData.append("description", description);
+            formData.append("author", author);
             formData.append("file", file);
+            formData.append("content", content);
             const response = await axios.post(
-                `${backendUrl}/api/gallery/create`,
+                `${backendUrl}/api/news/create`,
                 formData,
                 {
                     headers: { "Content-Type": "multipart/form-data" },
                 }
             );
             set((state) => ({
-                images: [...state.images, response.data],
+                news: [...state.news, response.data],
                 isLoading: false,
             }));
             return { success: true,error: null };
@@ -68,12 +74,12 @@ const useGalleryStore = create<GalleryStore>((set) => ({
           return { success: false,error: response?.data.errorMessage??"Server is not connected" };
         }
     },
-    deleteImage: async (id: number) => {
+    deleteNews: async (id: number) => {
         set({ isLoading: true });
         try {
-            await axios.delete(`${backendUrl}/api/gallery/delete/${id}`);
+            await axios.delete(`${backendUrl}/api/news/delete/${id}`);
             set((state) => ({
-                images: state.images.filter((img) => img.id !== id),
+                news: state.news.filter((newz) => newz.id !== id),
                 isLoading: false,
             }));
             return { success: true,error: null };
@@ -85,4 +91,4 @@ const useGalleryStore = create<GalleryStore>((set) => ({
     },
 }));
 
-export default useGalleryStore;
+export default useNewsStore;

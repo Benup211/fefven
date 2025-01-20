@@ -1,26 +1,50 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { PlusCircle, Search, Edit, Trash2, FileIcon } from 'lucide-react'
-
-// Mock data for resources
-const resources = [
-  { id: 1, title: "Annual Report 2022", description: "Detailed report of FFVEN activities and achievements in 2022", fileType: "PDF" },
-  { id: 2, title: "Membership Guidelines", description: "Information on how to become a member of FFVEN", fileType: "DOCX" },
-  { id: 3, title: "Export Procedures", description: "Step-by-step guide for exporting fruits and vegetables", fileType: "PDF" },
-]
+import { PlusCircle, Search, Trash2, View } from 'lucide-react'
+import useResourceStore from '@/state/admin/resource-store'
+import { useToast } from '@/hooks/use-toast'
 
 export default function AdminResourcesPage() {
   const [searchTerm, setSearchTerm] = useState('')
+  const { resources, isLoading, error, fetchResources, deleteResource } = useResourceStore()
+  const {toast} = useToast()
 
+  useEffect(() => {
+    fetchResources()
+  }, [fetchResources])
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
   const filteredResources = resources.filter(resource =>
     resource.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     resource.description.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  const handleDelete = async (id: number) => {
+    if (window.confirm('Are you sure you want to delete this resource?')) {
+      const data=await deleteResource(id)
+      if(data.success){
+        toast({
+          title: "Resource Deleted",
+          description: `Resource has been deleted successfully`,
+        })
+      }else{
+        toast({
+          title: "Error Deleting Resource",
+          description: data.error,
+          variant:'destructive'
+        })
+
+      }
+    }
+  }
+  
 
   return (
     <div className="space-y-6">
@@ -44,44 +68,49 @@ export default function AdminResourcesPage() {
         />
       </div>
 
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead className="hidden md:table-cell">Description</TableHead>
-              <TableHead>File Type</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredResources.map((resource) => (
-              <TableRow key={resource.id}>
-                <TableCell className="font-medium">{resource.title}</TableCell>
-                <TableCell className="hidden md:table-cell">{resource.description}</TableCell>
-                <TableCell>
-                  <div className="flex items-center">
-                    <FileIcon className="mr-2 h-4 w-4" />
-                    {resource.fileType}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex space-x-2">
-                    <Button variant="outline" size="sm">
-                      <Edit className="h-4 w-4" />
-                      <span className="sr-only">Edit</span>
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <Trash2 className="h-4 w-4" />
-                      <span className="sr-only">Delete</span>
-                    </Button>
-                  </div>
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <div className="text-red-500">{error}</div>
+      ) : (
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Title</TableHead>
+                <TableHead className="hidden md:table-cell">Description</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredResources.length === 0 ? (
+                <TableRow>
+                <TableCell colSpan={3} className="text-center py-4">
+                  No Resource found
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+              ):(
+                filteredResources.map((resource) => (
+                  <TableRow key={resource.id}>
+                    <TableCell>{resource.title}</TableCell>
+                    <TableCell className="hidden md:table-cell">{resource.description}</TableCell>
+                    <TableCell>
+                      <Link href={`${process.env.NEXT_PUBLIC_API_URL}/uploads/files/${resource.fileUrl}`} target='_blank'>
+                        <Button variant="ghost" size="sm" className="mr-2">
+                          <View className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                      <Button variant="ghost" size="sm" onClick={() => handleDelete(resource.id)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
     </div>
   )
 }

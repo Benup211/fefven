@@ -1,27 +1,20 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import Slider from 'react-slick'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChevronRight, Download, FileText } from 'lucide-react'
+import { ChevronRight, Download, FileText, Loader, Loader2 } from 'lucide-react'
 import { useLanguage } from "@/contexts/language-context"
 
 // Import slick carousel styles
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
-
-const sliderSettings = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 5000,
-}
+import useUserCarouselStore from '@/state/user/carousel-store'
+import { CarouselItem } from '@/components/home/carousel-item'
+import { ResourceSection } from '@/components/home/resource-section'
+import { NewsSection } from '@/components/home/news-section'
 
 const slides = {
   en: [
@@ -144,55 +137,13 @@ const newsItems = {
   ]
 }
 
-const resourcesData = {
-  en: [
-    { title: "Annual Report 2022", description: "Detailed report of FFVEN activities and achievements in 2022", url: "/documents/annual-report-2022.pdf" },
-    { title: "Membership Guidelines", description: "Information on how to become a member of FFVEN", url: "/documents/membership-guidelines.pdf" },
-    { title: "Export Procedures", description: "Step-by-step guide for exporting fruits and vegetables", url: "/documents/export-procedures.pdf" },
-    { title: "Quality Standards", description: "FFVEN quality standards for fruits and vegetables", url: "/documents/quality-standards.pdf" },
-    { title: "Market Analysis 2023", description: "Analysis of the current fruit and vegetable market in Nepal", url: "/documents/market-analysis-2023.pdf" },
-  ],
-  ne: [
-    { title: "वार्षिक प्रतिवेदन २०२२", description: "२०२२ मा FFVEN का गतिविधिहरू र उपलब्धिहरूको विस्तृत प्रतिवेदन", url: "/documents/annual-report-2022.pdf" },
-    { title: "सदस्यता दिशानिर्देश", description: "FFVEN को सदस्य कसरी बन्ने बारे जानकारी", url: "/documents/membership-guidelines.pdf" },
-    { title: "निर्यात प्रक्रियाहरू", description: "फलफूल र तरकारी निर्यात गर्नको लागि चरणबद्ध मार्गदर्शन", url: "/documents/export-procedures.pdf" },
-    { title: "गुणस्तर मापदण्डहरू", description: "फलफूल र तरकारीको लागि FFVEN गुणस्तर मापदण्डहरू", url: "/documents/quality-standards.pdf" },
-    { title: "बजार विश्लेषण २०२३", description: "नेपालमा हालको फलफूल र तरकारी बजारको विश्लेषण", url: "/documents/market-analysis-2023.pdf" },
-  ]
-}
 
 export default function Home() {
   const { language } = useLanguage()
-
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Slider Section */}
-      <section className="relative overflow-hidden">
-        <Slider {...sliderSettings}>
-          {slides[language].map((slide, index) => (
-            <div key={index} className="relative h-[600px]">
-              <Image
-                src={slide.image || "/placeholder.svg"}
-                alt={slide.title}
-                fill 
-                style={{ objectFit: "cover" }}
-                quality={100}
-                priority
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                <div className="text-center text-white px-4">
-                  <h1 className="text-4xl md:text-6xl font-bold mb-4">{slide.title}</h1>
-                  <p className="text-xl md:text-2xl mb-8">{slide.description}</p>
-                  <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                    {language === 'en' ? 'Learn More' : 'थप जान्नुहोस्'}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </Slider>
-      </section>
-
+      <CarouselItem/>
       {/* Features Section */}
       <section className="py-16 bg-secondary">
         <div className="container mx-auto px-4">
@@ -216,81 +167,10 @@ export default function Home() {
       </section>
 
       {/* Resources Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8 text-primary">
-            {language === 'en' ? 'Resources' : 'स्रोतहरू'}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {resourcesData[language].map((resource, index) => (
-              <Card key={index} className="flex flex-col h-full">
-                <CardHeader>
-                  <CardTitle className="text-primary text-xl flex items-center">
-                    <FileText className="mr-2 h-5 w-5" />
-                    {resource.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <p className="text-sm text-muted-foreground">{resource.description}</p>
-                </CardContent>
-                <CardFooter>
-                  <Link href={resource.url} target="_blank" rel="noopener noreferrer" className="w-full">
-                    <Button variant="outline" className="w-full">
-                      <Download className="mr-2 h-4 w-4" />
-                      {language === 'en' ? 'Download' : 'डाउनलोड'}
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Link href="/resources">
-              <Button variant="default" size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                {language === 'en' ? 'View All Resources' : 'सबै स्रोतहरू हेर्नुहोस्'}
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+      <ResourceSection/>
 
       {/* Recent News Section */}
-      <section className="py-16 bg-secondary">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-primary">
-            {language === 'en' ? 'Recent News' : 'ताजा समाचार'}
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {newsItems[language].map((item, index) => (
-              <Card key={index} className="flex flex-col">
-                <Image
-                  src={item.image || "/placeholder.svg"}
-                  alt={item.title}
-                  width={300}
-                  height={200}
-                  className="w-full h-48 object-cover"
-                />
-                <CardHeader>
-                  <CardTitle className="text-primary">{item.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <p>{item.summary}</p>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="outline" className="w-full text-accent hover:bg-accent hover:text-accent-foreground">
-                    {language === 'en' ? 'Read More' : 'थप पढ्नुहोस्'} <ChevronRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-          <div className="text-center mt-12">
-            <Button variant="default" size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-              {language === 'en' ? 'View All News' : 'सबै समाचार हेर्नुहोस्'}
-            </Button>
-          </div>
-        </div>
-      </section>
+      <NewsSection/>
 
       {/* Call to Action Section */}
       <section className="py-16 bg-primary text-primary-foreground">

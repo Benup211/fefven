@@ -29,7 +29,7 @@ export function AdminHeader({ sidebarOpen, setSidebarOpen }: AdminHeaderProps) {
         >
           <Menu className="h-6 w-6" />
         </Button>
-        <h1 className="text-sm md:text-2xl font-semibold text-gray-800 ml-2 lg:ml-0">FFVEN Admin</h1>
+        <h1 className="text-sm md:text-2xl font-semibold text-gray-800 ml-2 lg:ml-0">FEFVEN Admin</h1>
       </div>
       <div className="flex items-center space-x-4">
         <span className="text-sm text-gray-600">

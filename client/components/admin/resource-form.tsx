@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -10,6 +11,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { FileIcon, UploadIcon } from 'lucide-react'
+import useResourceStore from '@/state/admin/resource-store'
+import { useToast } from '@/hooks/use-toast'
 
 const schema = yup.object().shape({
   title: yup.string().required('Resource title is required'),
@@ -18,25 +21,41 @@ const schema = yup.object().shape({
 })
 
 export function ResourceForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [filePreview, setFilePreview] = useState<string | null>(null)
+  const [file, setFile] = useState<File | null>(null)
+  const { createResource, isLoading, error } = useResourceStore()
+  const router = useRouter()
+  const {toast} = useToast()
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = async (data:any) => {
-    setIsSubmitting(true)
-    // Here you would typically send the data to your backend
-    console.log(data)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    setIsSubmitting(false)
+  const onSubmit = async (data: any) => {
+    const formData = new FormData()
+    formData.append('title', data.title)
+    formData.append('description', data.description)
+    formData.append('file', file as File)
+    const response=await createResource(formData)
+    if(response.success){
+      toast({
+        title: "Resource Added",
+        description: `Resource has been added successfully`,
+      })
+      router.push('/admin/resources')
+    }else{
+      toast({
+        title: "Error Adding Resource",
+        description: response.error,
+        variant:'destructive'
+      })
+    }
   }
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0]
+      setFile(file)
       setFilePreview(file.name)
     }
   }
@@ -94,9 +113,11 @@ export function ResourceForm() {
         </CardContent>
       </Card>
 
+      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+
       <div className="flex justify-end">
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Submitting...' : 'Add Resource'}
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? 'Submitting...' : 'Add Resource'}
         </Button>
       </div>
     </form>

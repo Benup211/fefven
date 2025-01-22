@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { Request, Response, NextFunction } from "express";
-import { CarouselRoutes,GalleryRoutes,ResourceRoutes,EventsRoutes,NewsRoutes,DashboardRoutes } from "./routes";
+import { CarouselRoutes,GalleryRoutes,ResourceRoutes,EventsRoutes,NewsRoutes,DashboardRoutes, UserRoutes,FederationMemberRoutes,ProvinceMemberRoutes,DistrictMemberRoutes,MemberRoutes } from "./routes";
 import dotenv from "dotenv";
 import path from "path";
 dotenv.config();
@@ -42,6 +42,11 @@ export class MainServer {
         this.app.use("/api/events", EventsRoutes);
         this.app.use("/api/news", NewsRoutes);
         this.app.use("/api/dashboard", DashboardRoutes);
+        this.app.use("/api/user",UserRoutes);
+        this.app.use("/api/federation-member",FederationMemberRoutes);
+        this.app.use("/api/province-member",ProvinceMemberRoutes);
+        this.app.use("/api/district-member",DistrictMemberRoutes);
+        this.app.use("/api/member",MemberRoutes);
     }
 
     handle404Error() {

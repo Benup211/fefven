@@ -3,7 +3,7 @@ import { Response } from 'express';
 export class JwtService {
     static async sign(res: Response, payload: any, secret: string, options: any): Promise<string> {
         const token = jwt.sign(payload, secret, options);
-        res.cookie("AdminToken", token, {
+        res.cookie("admintoken", token, {
             secure: true,
             httpOnly: true,
             sameSite: 'none',

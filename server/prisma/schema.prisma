@@ -69,3 +69,42 @@ model news {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+enum EnrollmentStatus {
+  PAST
+  PRESENT
+}
+
+model FederationMember {
+  id                  Int              @id @default(autoincrement())
+  name                String
+  imageUrl            String
+  contactNo           String
+  designation         String
+  startDate           String
+  endDate             String
+  designationPriority Int
+  enrollmentStatus    EnrollmentStatus
+
+  @@index([designationPriority])
+}
+
+model ProvinceMember {
+  id                  Int    @id @default(autoincrement())
+  name                String
+  imageUrl            String
+  contactNo           String
+  designation         String
+  designationPriority Int
+  province            Int
+}
+
+model DistrictMember {
+  id                  Int    @id @default(autoincrement())
+  name                String
+  imageUrl            String
+  contactNo           String
+  designation         String
+  designationPriority Int
+  district            String
+}

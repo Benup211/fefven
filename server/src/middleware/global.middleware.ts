@@ -14,21 +14,26 @@ export class GlobalMiddleware {
     }
     static async CheckAuth(req: Request, res: Response, next: NextFunction) {
         try {
-            const token = req.cookies.Token;
+            const token = req.cookies.admintoken;
             if (!token) {
-                res.clearCookie("AdminToken");
+                res.clearCookie("admintoken");
                 next(ResponseService.CreateErrorResponse("Unauthorized", 401));
             }
-            const decodedToken = (await JwtService.verify(
-                token,
-                process.env.JWT_SECRET as string
-            )) as IDecodedToken;
-            if (!decodedToken) {
-                res.clearCookie("AdminToken");
+            try{
+                const decodedToken = (await JwtService.verify(
+                    token,
+                    process.env.JWT_SECRET as string
+                )) as IDecodedToken;
+                if (!decodedToken) {
+                    res.clearCookie("admintoken");
+                    next(ResponseService.CreateErrorResponse("Invalid token", 401));
+                }
+                req.body.userID = decodedToken.userID;
+                next();
+            }catch(e){
+                res.clearCookie("admintoken");
                 next(ResponseService.CreateErrorResponse("Invalid token", 401));
             }
-            req.body.userID = decodedToken.userID;
-            next();
         } catch (error) {
             next(error);
         }

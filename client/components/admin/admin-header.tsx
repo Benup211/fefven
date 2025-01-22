@@ -1,21 +1,34 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Menu, LogOut } from 'lucide-react'
+import useAuthStore from "@/state/admin/login-store"
+import { Menu, LogOut, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-
+import {toast} from '@/hooks/use-toast'
 interface AdminHeaderProps {
   sidebarOpen: boolean
   setSidebarOpen: (open: boolean) => void
 }
 
 export function AdminHeader({ sidebarOpen, setSidebarOpen }: AdminHeaderProps) {
-  const { user, logout, isSampleUser } = { user: "benup", logout: () => false, isSampleUser: false }
+  const {logout,isLoading}=useAuthStore()
   const router = useRouter()
 
-  const handleLogout = () => {
-    logout()
-    router.push('/admin/login')
+  const handleLogout = async() => {
+    const response=await logout();
+    if(response.success){
+      toast({
+        title:"Logout Success",
+        description:"You have successfully logged out",
+      })
+      router.push('/admin/login')
+    }else{
+      toast({
+        title:"Logout Failed",
+        description:response.error,
+        variant:"destructive"
+      })
+    }
   }
 
   return (
@@ -33,12 +46,11 @@ export function AdminHeader({ sidebarOpen, setSidebarOpen }: AdminHeaderProps) {
       </div>
       <div className="flex items-center space-x-4">
         <span className="text-sm text-gray-600">
-          Logged in as: <strong>{user}</strong>
-          {isSampleUser && " (Sample User)"}
+          Logged in as: <strong>{"fefven"}</strong>
         </span>
         <Button variant="ghost" size="sm" onClick={handleLogout}>
           <LogOut className="h-4 w-4 mr-2" />
-          Logout
+          {isLoading ? <Loader2 className="animate-spin h-4 w-4" /> : "Logout"}
         </Button>
       </div>
     </header>

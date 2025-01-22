@@ -1,57 +1,16 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
+import React from 'react'
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChevronRight, Download, FileText, Loader, Loader2 } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useLanguage } from "@/contexts/language-context"
 
 // Import slick carousel styles
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
-import useUserCarouselStore from '@/state/user/carousel-store'
 import { CarouselItem } from '@/components/home/carousel-item'
 import { ResourceSection } from '@/components/home/resource-section'
 import { NewsSection } from '@/components/home/news-section'
-
-const slides = {
-  en: [
-    {
-      image: "/placeholder.svg?height=600&width=1200",
-      title: "Empowering Nepal's Fruit and Vegetable Industry",
-      description: "Join us in our mission to promote sustainable growth and innovation in agriculture.",
-    },
-    {
-      image: "/placeholder.svg?height=600&width=1200",
-      title: "Connecting Farmers to Global Markets",
-      description: "We provide resources and support to help local farmers reach international consumers.",
-    },
-    {
-      image: "/placeholder.svg?height=600&width=1200",
-      title: "Promoting Sustainable Farming Practices",
-      description: "Learn about our initiatives to encourage environmentally friendly cultivation methods.",
-    },
-  ],
-  ne: [
-    {
-      image: "http://localhost:3001/uploads/images/1737215648351-856504548-bg.jpg",
-      title: "नेपालको फलफूल र तरकारी उद्योगलाई सशक्त बनाउँदै",
-      description: "कृषिमा दिगो विकास र नवीनता प्रवर्द्धन गर्ने हाम्रो मिशनमा सामेल हुनुहोस्।",
-    },
-    {
-      image: "http://localhost:3001/uploads/images/1737215648351-856504548-bg.jpg",
-      title: "किसानहरूलाई विश्व बजारसँग जोड्दै",
-      description: "हामी स्थानीय किसानहरूलाई अन्तर्राष्ट्रिय उपभोक्तासम्म पुग्न मद्दत गर्न स्रोत र समर्थन प्रदान गर्दछौं।",
-    },
-    {
-      image: "http://localhost:3001/uploads/images/1737215648351-856504548-bg.jpg",
-      title: "दिगो कृषि अभ्यासहरूको प्रवर्द्धन",
-      description: "वातावरण मैत्री खेती विधिहरूलाई प्रोत्साहन गर्ने हाम्रा पहलहरूको बारेमा जान्नुहोस्।",
-    },
-  ]
-}
 
 const features = {
   en: [

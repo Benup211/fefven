@@ -4,7 +4,10 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { LayoutDashboard, CalendarDays, Users, FileText, Settings, LogOut, X, Newspaper, Image,Images } from 'lucide-react'
+import { LayoutDashboard, CalendarDays, Users, FileText, Settings, LogOut, X, Newspaper, Image,Images, Loader2 } from 'lucide-react'
+import useAuthStore from '@/state/admin/login-store'
+import { toast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
 
 const sidebarItems = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
@@ -21,9 +24,27 @@ interface AdminSidebarProps {
   setOpen: (open: boolean) => void
 }
 
+
 export function AdminSidebar({ open, setOpen }: AdminSidebarProps) {
   const pathname = usePathname()
-
+  const {isLoading,logout}=useAuthStore();
+  const router = useRouter()
+  const handleLogout = async() => {
+    const response=await logout();
+    if(response.success){
+      toast({
+        title:"Logout Success",
+        description:"You have successfully logged out",
+      })
+      router.push('/admin/login')
+    }else{
+      toast({
+        title:"Logout Failed",
+        description:response.error,
+        variant:"destructive"
+      })
+    }
+  }
   return (
     <div className={cn(
       "fixed inset-y-0 left-0 z-50 w-64 bg-white border-r transform transition-transform duration-300 ease-in-out",
@@ -61,9 +82,10 @@ export function AdminSidebar({ open, setOpen }: AdminSidebarProps) {
           </nav>
         </div>
         <div className="p-4 border-t">
-          <Button variant="ghost" className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50">
+          <Button variant="ghost" className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50" onClick={()=>{
+            handleLogout()}} disabled={isLoading}>
             <LogOut className="mr-2 h-4 w-4" />
-            Logout
+            {isLoading?<Loader2 className="animate-spin w-6 h-6"/>:"Logout"}
           </Button>
         </div>
       </div>

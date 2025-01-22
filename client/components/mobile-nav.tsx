@@ -28,13 +28,15 @@ const navItems = {
     en: [
         { title: "Home", href: "/" },
         {
-            title: "About",
-            href: "/about",
+            title: "Executive Members",
+            href: "/members",
             subItems: [
-                { title: "Our Mission", href: "/about/mission" },
-                { title: "Our Team", href: "/about/team" },
+                { title: "Federation", href: "/member/federation" },
+                { title: "Provincial", href: "/member/province" },
+                { title: "District", href: "/member/district" },
             ],
         },
+        {title: "About",href: "/about"},
         { title: "Resources", href: "/resources" },
         { title: "Events", href: "/events" },
         { title: "Gallery", href: "/gallery" },
@@ -44,13 +46,15 @@ const navItems = {
     ne: [
         { title: "गृहपृष्ठ", href: "/" },
         {
-            title: "हाम्रोबारे",
-            href: "/about",
+            title: "कार्य समिति",
+            href: "/members",
             subItems: [
-                { title: "हाम्रो लक्ष्य", href: "/about/mission" },
-                { title: "हाम्रो टीम", href: "/about/team" },
+                { title: "महासंघ", href: "/member/federation" },
+                { title: "प्रदेश", href: "/member/province" },
+                { title: "जिल्ला", href: "/member/district" },
             ],
         },
+        {title: "हाम्रोबारे",href: "/about",},
         { title: "स्रोतहरू", href: "/resources" },
         { title: "कार्यक्रमहरू", href: "/events" },
         { title: "ग्यालरी", href: "/gallery" },
@@ -101,7 +105,7 @@ export function MobileNav() {
                                             onClick={() =>
                                                 toggleSubMenu(item.href)
                                             }
-                                            className="flex w-full items-center justify-between text-sm font-medium transition-colors hover:text-primary"
+                                            className="flex w-full items-center justify-between text-sm font-medium transition-colors text-gray-500 hover:text-primary"
                                         >
                                             {item.title}
                                             {openSubMenu === item.href ? (

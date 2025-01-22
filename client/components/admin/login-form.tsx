@@ -9,6 +9,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useRouter } from 'next/navigation'
+import useAuthStore from '@/state/admin/login-store'
+import { Loader2 } from 'lucide-react'
+import {toast} from '@/hooks/use-toast'
 
 const schema = yup.object().shape({
   username: yup.string().required('Username is required'),
@@ -16,8 +19,7 @@ const schema = yup.object().shape({
 })
 
 export function LoginForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const { login } = { login: async () => { console.log('Logging in with') } }
+  const { login,logout,isLoading } = useAuthStore()
   const router = useRouter()
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
@@ -25,15 +27,19 @@ export function LoginForm() {
   })
 
   const onSubmit = async (data:any) => {
-    setIsSubmitting(true)
-    try {
-      await login()
+    const response= await login(data.username, data.password)
+    if(response.success){
+      toast({
+        title:"Login Success",
+        description:"You have successfully logged in",
+      })
       router.push('/admin')
-    } catch (error) {
-      console.error('Login failed:', error)
-      // Here you would typically show an error message to the user
-    } finally {
-      setIsSubmitting(false)
+    }else{
+      toast({
+        title:"Login Failed",
+        description:response.error,
+        variant:"destructive"
+      })
     }
   }
 
@@ -43,10 +49,11 @@ export function LoginForm() {
         <CardTitle className='mx-auto'>Admin Login</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4"
+         noValidate>
           <div>
             <Label htmlFor="username">Username</Label>
-            <Input id="username" {...register('username')} placeholder="Enter your username" />
+            <Input id="username" type='text' {...register('username')} placeholder="Enter your username" />
             {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>}
           </div>
 
@@ -56,8 +63,8 @@ export function LoginForm() {
             {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
           </div>
 
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? 'Logging in...' : 'Login'}
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? <Loader2 className=" animate-spin w-4 h-4" /> : 'Login'}
           </Button>
         </form>
       </CardContent>

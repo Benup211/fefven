@@ -18,3 +18,16 @@ export interface CarouselItem {
     errorName: string;
     errorMessage: string;
 }
+
+export interface Member {
+  id: number
+  name: string
+  imageUrl: string
+  contactNo: string
+  designation: string
+  startDate: string
+  endDate: string
+  designationPriority: number
+  enrollmentStatus: "PRESENT" | "PAST"
+}
+

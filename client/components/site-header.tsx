@@ -16,7 +16,7 @@ import { usePathname } from 'next/navigation'
 
 
 const organizationName = {
-    en: "FFVEN",
+    en: "FEFVEN",
     ne: "FEFVEN",
 };
 
@@ -35,11 +35,11 @@ export function SiteHeader() {
                         {organizationName[language]}
                     </span>
                 </Link>
-                <div className="hidden md:flex md:flex-1">
+                <div className="hidden lg:flex lg:flex-1">
                     <MainNav />
                 </div>
                 <div className="flex items-center space-x-4 ml-auto">
-                    <div className="hidden md:flex items-center space-x-4">
+                    <div className="hidden lg:flex items-center space-x-4">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" size="sm">

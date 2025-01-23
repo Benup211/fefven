@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { LayoutDashboard, CalendarDays, Users, FileText, Settings, LogOut, X, Newspaper, Image,Images, Loader2 } from 'lucide-react'
+import { LayoutDashboard, CalendarDays, Users, FileText, Settings, LogOut, X, Newspaper, Image,Images, Loader2, Landmark } from 'lucide-react'
 import useAuthStore from '@/state/admin/login-store'
 import { toast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
@@ -17,6 +17,7 @@ const sidebarItems = [
   { name: 'Gallery', href: '/admin/gallery', icon: Image },
   { name: 'Members', href: '/admin/members', icon: Users },
   { name: 'Resources', href: '/admin/resources', icon: FileText },
+  {name:'Institutional Members', href:'/admin/organization', icon:Landmark},
 ]
 
 interface AdminSidebarProps {

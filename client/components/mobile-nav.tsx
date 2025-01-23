@@ -36,12 +36,14 @@ const navItems = {
                 { title: "District", href: "/member/district" },
             ],
         },
+        {title:"Institutional Members",href:"/organizations"},
         {title: "About",href: "/about"},
         { title: "Resources", href: "/resources" },
         { title: "Events", href: "/events" },
         { title: "Gallery", href: "/gallery" },
         { title: "News", href: "/news" },
         { title: "Contact", href: "/contact" },
+        
     ],
     ne: [
         { title: "गृहपृष्ठ", href: "/" },
@@ -54,6 +56,7 @@ const navItems = {
                 { title: "जिल्ला", href: "/member/district" },
             ],
         },
+        {title:"संस्थागत सदस्यहरू",href:"/organizations"},
         {title: "हाम्रोबारे",href: "/about",},
         { title: "स्रोतहरू", href: "/resources" },
         { title: "कार्यक्रमहरू", href: "/events" },
@@ -78,7 +81,7 @@ export function MobileNav() {
             <SheetTrigger asChild>
                 <Button
                     variant="ghost"
-                    className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+                    className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
                 >
                     <Menu className="h-6 w-6" />
                     <span className="sr-only">Toggle Menu</span>

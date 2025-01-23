@@ -108,3 +108,21 @@ model DistrictMember {
   designationPriority Int
   district            String
 }
+
+model Organization {
+  id            Int                  @id @default(autoincrement())
+  name          String
+  establishedAt String
+  members       OrganizationMember[]
+}
+
+model OrganizationMember {
+  id                  Int          @id @default(autoincrement())
+  name                String
+  contactNo           String
+  designation         String
+  designationPriority Int
+  organizationId      Int
+  organization        Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+

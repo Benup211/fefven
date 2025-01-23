@@ -6,3 +6,5 @@ export * from './news.repository'
 export * from './federation-member.repository'
 export * from './province-member.repository'
 export * from './district-member.repository'
+export * from "./organization.repository"
+export * from "./organization-member.repository"

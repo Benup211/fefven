@@ -185,7 +185,7 @@ export default function AdminGalleryPage() {
                                         <TableCell>
                                             <div className="relative w-40 h-40">
                                                 <Image
-                                                    src={`http://localhost:3001/uploads/images/${image.imageUrl}`}
+                                                    src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/images/${image.imageUrl}`}
                                                     alt={image.title}
                                                     style={{
                                                         objectFit: "cover",

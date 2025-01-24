@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import Image from '@tiptap/extension-image'
+import { Image as TipTapImage } from '@tiptap/extension-image'
 import Link from '@tiptap/extension-link'
 import Youtube from '@tiptap/extension-youtube'
 import { Button } from "@/components/ui/button"
@@ -19,6 +19,7 @@ import { Editor } from '@tiptap/react'
 import { useToast } from '@/hooks/use-toast'
 import { useRouter } from "next/navigation";
 import useNewsStore from '@/state/admin/news-store'
+import Image from 'next/image'
 
 const schema = yup.object().shape({
   title: yup.string().required('News title is required'),
@@ -154,7 +155,7 @@ export function NewsForm() {
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Image.configure({
+      TipTapImage.configure({
         HTMLAttributes: {
           class: 'max-w-full h-auto',
         },
@@ -191,7 +192,7 @@ export function NewsForm() {
     }
   }, [editor])
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: { title: string; description: string; author: string; content: string }) => {
     const response=await addNews(data.title,data.description,data.author,formState.image as File,data.content);
     if(response.success){
       toast({
@@ -287,7 +288,7 @@ export function NewsForm() {
             <Input id="image" type="file" accept="image/*" onChange={handleImageUpload} />
             {formState.imagePreview && (
               <div className="mt-2">
-                <img src={formState.imagePreview || "/placeholder.svg"} alt="Preview" className="max-w-full h-auto max-h-48 object-contain" />
+                <Image src={formState.imagePreview || "/placeholder.svg"} alt="Preview" className="max-w-full h-auto max-h-48 object-contain" width={400} height={400} />
               </div>
             )}
           </div>

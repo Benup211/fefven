@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/language-context";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
     Card,

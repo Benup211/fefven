@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -60,22 +59,22 @@ export function EventForm() {
         },
     });
 
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data: { title: string; description: string; category: string; tags: string; startDate: string; startTime: string; endDate: string; endTime: string; venueName: string; venueAddress: string; city: string; organizerName: string; organizerContact: string; organizerWebsite?: string; }) => {
         const response = await addEvents(
             data.title,
             data.description,
             data.category,
             data.tags,
-            data.startDate,
+            new Date(data.startDate),
             data.startTime,
-            data.endDate,
+            new Date(data.endDate),
             data.endTime,
             data.venueName,
             data.venueAddress,
             data.city,
             data.organizerName,
             data.organizerContact,
-            data?.organizerWebsite
+            data.organizerWebsite
         );
         if (response.success) {
             toast({

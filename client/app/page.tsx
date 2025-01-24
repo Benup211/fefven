@@ -11,6 +11,7 @@ import "slick-carousel/slick/slick-theme.css"
 import { CarouselItem } from '@/components/home/carousel-item'
 import { ResourceSection } from '@/components/home/resource-section'
 import { NewsSection } from '@/components/home/news-section'
+import Link from 'next/link'
 
 const features = {
   en: [
@@ -59,42 +60,6 @@ const features = {
   ]
 }
 
-const newsItems = {
-  en: [
-    {
-      title: "New Export Regulations Announced",
-      summary: "The government has announced new regulations to boost fruit and vegetable exports.",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-    {
-      title: "Annual Mango Festival Success",
-      summary: "This year's Mango Festival saw record attendance and sales.",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-    {
-      title: "New Organic Certification Process",
-      summary: "A streamlined organic certification process has been introduced for farmers.",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-  ],
-  ne: [
-    {
-      title: "नयाँ निर्यात नियमहरू घोषणा",
-      summary: "सरकारले फलफूल र तरकारी निर्यात बढाउन नयाँ नियमहरू घोषणा गरेको छ।",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-    {
-      title: "वार्षिक आँप महोत्सव सफलता",
-      summary: "यस वर्षको आँप महोत्सवमा रेकर्ड उपस्थिति र बिक्री देखियो।",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-    {
-      title: "नयाँ जैविक प्रमाणीकरण प्रक्रिया",
-      summary: "किसानहरूका लागि सरलीकृत जैविक प्रमाणीकरण प्रक्रिया शुरू गरिएको छ।",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-  ]
-}
 
 
 export default function Home() {
@@ -142,9 +107,9 @@ export default function Home() {
               ? 'Become a part of Nepal\'s leading fruit and vegetable industry network' 
               : 'नेपालको अग्रणी फलफूल र तरकारी उद्योग नेटवर्कको हिस्सा बन्नुहोस्'}
           </p>
-          <Button size="lg" variant="outline" className="bg-accent text-accent-foreground hover:bg-accent/90">
+          <Link href={'/contact'}><Button size="lg" variant="outline" className="bg-accent text-accent-foreground hover:bg-accent/90">
             {language === 'en' ? 'Become a Member' : 'सदस्य बन्नुहोस्'}
-          </Button>
+          </Button></Link>
         </div>
       </section>
     </div>

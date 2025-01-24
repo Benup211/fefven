@@ -10,23 +10,17 @@ import {
     ArrowLeft,
     UserIcon,
     SearchIcon,
-    PlusIcon,
     PhoneIcon,
     BriefcaseIcon,
-    Trash2Icon,
 } from "lucide-react";
-import { useOrganizationStore } from "@/state/admin/organization-store";
 import { useOrganizationMemberStore } from "@/state/admin/organization-member-store";
-import Link from "next/link";
-import { toast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/language-context";
 
 export default function OrganizationDetails() {
     const { id } = useParams();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
-    const { organizations } = useOrganizationStore();
-    const { members, fetchMembers, deleteMember, Loading, error } =
+    const { members, fetchMembers, Loading, error } =
         useOrganizationMemberStore();
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);

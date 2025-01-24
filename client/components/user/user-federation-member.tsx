@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { filterMembers } from "@/lib/user-filter-member";
+import Image from "next/image";
 import type { Member } from "@/lib/types";
 import { motion } from "framer-motion";
 import { useUserFederationMembersStore } from "@/state/user/federation-store";
@@ -14,7 +15,7 @@ import { useLanguage } from "@/contexts/language-context";
 export function FederationMembersClient() {
     const {language}=useLanguage()
     const [searchTerm, setSearchTerm] = useState("");
-    const { presentMembers, pastMembers, isLoading, error, fetchMembers } =
+    const { presentMembers, pastMembers, error, fetchMembers } =
         useUserFederationMembersStore();
 
     const isFetched = useRef(false);
@@ -149,13 +150,15 @@ function MemberCard({
     return (
         <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg">
             <div className="aspect-video relative">
-                <img
+                <Image
                     src={
                         `${process.env.NEXT_PUBLIC_API_URL}/uploads/images/${member.imageUrl}` ||
                         "/placeholder.svg"
                     }
                     alt={member.name}
                     className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                    width={400}
+                    height={400}
                 />
                 <Badge
                     variant={

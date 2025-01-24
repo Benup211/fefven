@@ -18,8 +18,8 @@ const content = {
     message: "Message",
     submit: "Send Message",
     address: "Kathmandu, Nepal",
-    phone: "+977 1 4444444",
-    emailAddress: "info@ffven.org.np",
+    phone: "+977 9851017550",
+    emailAddress: "info@fefven.com",
     formSuccess: "Thank you for your message. We'll get back to you soon!",
     contactInfo: "Contact Information",
     location: "Our Location",
@@ -32,8 +32,8 @@ const content = {
     message: "सन्देश",
     submit: "सन्देश पठाउनुहोस्",
     address: "काठमाडौं, नेपाल",
-    phone: "+९७७ १ ४४४४४४४",
-    emailAddress: "info@ffven.org.np",
+    phone: "+९७७ ९८५१०१७५५०",
+    emailAddress: "info@fefven.com",
     formSuccess: "तपाईंको सन्देशको लागि धन्यवाद। हामी चाँडै तपाईंलाई जवाफ दिनेछौं!",
     contactInfo: "सम्पर्क जानकारी",
     location: "हाम्रो स्थान",
@@ -88,7 +88,7 @@ export default function ContactPage() {
         <Card>
           <CardHeader>
             <CardTitle>Send us a message</CardTitle>
-            <CardDescription>We'll get back to you as soon as possible</CardDescription>
+            <CardDescription>We&apos;ll get back to you as soon as possible</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -141,7 +141,7 @@ export default function ContactPage() {
               style={{border:0}} 
               allowFullScreen={true} 
               loading="lazy"
-              title="FFVEN Location Map"
+              title="FEFVEN Location Map"
             ></iframe>
           </div>
         </CardContent>

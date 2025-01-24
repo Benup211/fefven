@@ -37,7 +37,7 @@ export default function ProvinceMembers() {
     const ITEMS_PER_PAGE = 10;
     const NO_MEMBERS_MESSAGE = language === 'en' ? "No member found" : "कुनै सदस्य फेला परेनन्";
     const SKELETON_COUNT = 10;
-    const { members, isLoading, error, fetchMembers } = useProvinceStore();
+    const { members, error, fetchMembers } = useProvinceStore();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedProvince, setSelectedProvince] = useState<
         string | undefined
@@ -185,12 +185,14 @@ export default function ProvinceMembers() {
                         transition={{ duration: 0.3, delay: index * 0.1 }}
                     >
                         <div className="aspect-video relative">
-                            <img
+                            <Image
                                 src={
                                     `${process.env.NEXT_PUBLIC_API_URL}/uploads/images/${member.imageUrl}` ||
                                     "/placeholder.svg"
                                 }
                                 alt={member.name}
+                                width={300}
+                                height={300}
                                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                             />
                         </div>

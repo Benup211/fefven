@@ -31,7 +31,7 @@ export function ResourceForm() {
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: { title: string | Blob; description: string | Blob }) => {
     const formData = new FormData()
     formData.append('title', data.title)
     formData.append('description', data.description)

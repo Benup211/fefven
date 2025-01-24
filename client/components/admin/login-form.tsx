@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -19,14 +18,14 @@ const schema = yup.object().shape({
 })
 
 export function LoginForm() {
-  const { login,logout,isLoading } = useAuthStore()
+  const { login,isLoading } = useAuthStore()
   const router = useRouter()
 
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = async (data:any) => {
+  const onSubmit = async (data: { username: string; password: string }) => {
     const response= await login(data.username, data.password)
     if(response.success){
       toast({

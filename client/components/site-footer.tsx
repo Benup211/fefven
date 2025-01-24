@@ -20,10 +20,10 @@ const content = {
         ],
         contact: "Contact Us",
         address: "Kathmandu, Nepal",
-        phone: "+977 1 4444444",
-        email: "info@ffven.org.np",
+        phone: "+977 9851017550",
+        email: "info@fefven.com",
         copyright:
-            "© 2023 Federation of Fruits and Vegetable Entrepreneurs Nepal. All rights reserved.",
+            "© 2025 Federation of Fruits and Vegetable Entrepreneurs Nepal. All rights reserved.",
     },
     ne: {
         about: "हाम्रो बारेमा",
@@ -40,10 +40,10 @@ const content = {
         ],
         contact: "सम्पर्क गर्नुहोस्",
         address: "काठमाडौं, नेपाल",
-        phone: "+९७७ १ ४४४४४४४",
-        email: "info@ffven.org.np",
+        phone: "+९७७ ९८५१०१७५५०",
+        email: "info@fefven.com",
         copyright:
-            "© २०२३ फलफूल तथा तरकारी उद्यमी महासंघ नेपाल। सर्वाधिकार सुरक्षित।",
+            "© २०२५ फलफूल तथा तरकारी उद्यमी महासंघ नेपाल। सर्वाधिकार सुरक्षित।",
     },
 };
 

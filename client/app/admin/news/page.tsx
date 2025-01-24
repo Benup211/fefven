@@ -12,7 +12,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { PlusCircle, Search, Edit, Trash2 } from "lucide-react";
+import { PlusCircle, Search,Trash2 } from "lucide-react";
 import useNewsStore from "@/state/admin/news-store";
 import { toast } from "@/hooks/use-toast";
 

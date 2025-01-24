@@ -31,7 +31,6 @@ export default function ResourcesPage() {
     const { language } = useLanguage();
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const [isMobile, setIsMobile] = useState(false);
     const { resources, fetchResources } = useUserResourceStore();
     const isFetched = useRef(false);
     type ResourceItem = { fileUrl: string; title: string; description: string };
@@ -62,7 +61,7 @@ export default function ResourcesPage() {
     }, [resources]);
 
     useEffect(() => {
-        const checkIfMobile = () => setIsMobile(window.innerWidth < 1024);
+        const checkIfMobile = () =>(window.innerWidth < 1024);
         checkIfMobile();
         window.addEventListener("resize", checkIfMobile);
         return () => window.removeEventListener("resize", checkIfMobile);

@@ -30,7 +30,6 @@ import {
 } from "@/components/skeleton/user-province-skeleton";
 import { nepaliDistricts } from "@/lib/nepaliDistricts";
 import { useLanguage } from "@/contexts/language-context";
-export { nepaliDistricts } from "@/lib/nepaliDistricts";
 
 const MotionCard = motion(Card);
 
@@ -40,7 +39,7 @@ export default function DistrictMembers() {
     const NO_MEMBERS_MESSAGE =
         language === "en" ? "No member found" : "कुनै सदस्य प्राप्त भएन";
     const SKELETON_COUNT = 10;
-    const { members, isLoading, error, fetchMembers } = useUserDistrictStore();
+    const { members, error, fetchMembers } = useUserDistrictStore();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedDistrict, setSelectedDistrict] = useState<
         string | undefined
@@ -186,11 +185,13 @@ export default function DistrictMembers() {
                         transition={{ duration: 0.3, delay: index * 0.1 }}
                     >
                         <div className="aspect-video relative">
-                            <img
+                            <Image
                                 src={
                                     `${process.env.NEXT_PUBLIC_API_URL}/uploads/images/${member.imageUrl}` ||
                                     "/placeholder.svg"
                                 }
+                                width={300}
+                                height={300}
                                 alt={member.name}
                                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                             />

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { LayoutDashboard, CalendarDays, Users, FileText, Settings, LogOut, X, Newspaper, Image,Images, Loader2, Landmark } from 'lucide-react'
+import { LayoutDashboard, CalendarDays, Users, FileText, LogOut, X, Newspaper, Image,Images, Loader2, Landmark } from 'lucide-react'
 import useAuthStore from '@/state/admin/login-store'
 import { toast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'

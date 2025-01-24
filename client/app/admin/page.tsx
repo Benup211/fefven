@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import useDashboardStore from "@/state/admin/dashboard-store";
-import { CalendarDays, Images, Newspaper, Image } from "lucide-react";
+import { CalendarDays, Images, Newspaper } from "lucide-react";
 import { useEffect } from "react";
 
 export default function AdminDashboard() {
@@ -65,7 +65,7 @@ export default function AdminDashboard() {
                             <CardTitle className="text-sm font-medium">
                                 Total Gallery
                             </CardTitle>
-                            <Image className="h-4 w-4 text-muted-foreground" />
+                            <Images className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
@@ -78,7 +78,7 @@ export default function AdminDashboard() {
                             <CardTitle className="text-sm font-medium">
                                 Total Resources
                             </CardTitle>
-                            <Image className="h-4 w-4 text-muted-foreground" />
+                            <Images className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">

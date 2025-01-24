@@ -5,9 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarIcon, SearchIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import { CalendarIcon, SearchIcon } from "lucide-react";
 import { useOrganizationStore } from "@/state/admin/organization-store";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/language-context";
 
@@ -17,9 +16,9 @@ export default function OrganizationList() {
     const [isLoading, setIsLoading] = useState(true);
     const pageSize = 12;
     const router = useRouter();
-    const {language}=useLanguage();
+    const { language } = useLanguage();
 
-    const { organizations, fetchOrganizations,Loading,error} =
+    const { organizations, fetchOrganizations, Loading, error } =
         useOrganizationStore();
 
     useEffect(() => {
@@ -66,7 +65,14 @@ export default function OrganizationList() {
         </Card>
     );
 
-    if(!Loading && error)return <div className="text-red-500">{error}</div>
+    if (!Loading && error)
+        return (
+            <div className="text-center text-primary">
+                {language === "en"
+                    ? "No Institutional Members found"
+                    : "कुनै संस्थागत सदस्यहरू फेला परेनन्"}
+            </div>
+        );
 
     return (
         <div className="space-y-2 p-4">
@@ -74,7 +80,11 @@ export default function OrganizationList() {
                 <div className="relative w-full max-w-md">
                     <Input
                         type="text"
-                        placeholder={language==='en'?"Search organizations/members...":"संस्था/सदस्यहरू खोज्नुहोस्..."}
+                        placeholder={
+                            language === "en"
+                                ? "Search organizations/members..."
+                                : "संस्था/सदस्यहरू खोज्नुहोस्..."
+                        }
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         className="pl-10 pr-4 py-2 rounded-full border-2 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition-all duration-300"
@@ -93,7 +103,9 @@ export default function OrganizationList() {
                 </div>
             ) : filteredOrganizations.length === 0 ? (
                 <div className="text-center text-gray-500 dark:text-gray-400">
-                    {language==='en'?"No Institutional Members found":"कुनै संस्थागत सदस्यहरू फेला परेनन्"}
+                    {language === "en"
+                        ? "No Institutional Members found"
+                        : "कुनै संस्थागत सदस्यहरू फेला परेनन्"}
                 </div>
             ) : (
                 <div className="md:container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
@@ -116,7 +128,10 @@ export default function OrganizationList() {
                                             size={16}
                                         />
                                         <span>
-                                            {language==='en'?"Established":"स्थापित"}: {org.establishedAt} B.S.
+                                            {language === "en"
+                                                ? "Established"
+                                                : "स्थापित"}
+                                            : {org.establishedAt} B.S.
                                         </span>
                                     </div>
                                 </div>

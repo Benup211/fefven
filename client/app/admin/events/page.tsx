@@ -12,7 +12,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { PlusCircle, Search, Edit, Trash2 } from "lucide-react";
+import { PlusCircle, Search,Trash2 } from "lucide-react";
 import useEventStore from "@/state/admin/events-store";
 import { useToast } from "@/hooks/use-toast";
 export default function AdminEventsPage() {

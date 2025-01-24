@@ -25,7 +25,7 @@ export class MainServer {
         this.app.use(bodyParser.json());
         this.app.use(cors(
             {
-                origin: ["http://localhost:3000","https://unique-squirrel-enormously.ngrok-free.app"],
+                origin: [process.env.ORIGIN_URL as string],
                 credentials: true,
             }
         ));

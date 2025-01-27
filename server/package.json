@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Benup211/fefven#readme",
   "dependencies": {
     "@prisma/client": "^6.2.1",
+    "@types/morgan": "^1.9.9",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
@@ -28,6 +29,7 @@
     "express": "^4.21.2",
     "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.16",
     "nodemon": "^3.1.9",

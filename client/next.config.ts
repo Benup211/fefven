@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
-    domains: ['localhost'],
+    domains: ['94.130.59.172'],
   },
 };
 

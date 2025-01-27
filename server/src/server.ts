@@ -6,6 +6,7 @@ import { Request, Response, NextFunction } from "express";
 import { CarouselRoutes,GalleryRoutes,ResourceRoutes,EventsRoutes,NewsRoutes,DashboardRoutes, UserRoutes,FederationMemberRoutes,ProvinceMemberRoutes,DistrictMemberRoutes,MemberRoutes,OrganizationRoutes,OrganizationMemberRoutes } from "./routes";
 import dotenv from "dotenv";
 import path from "path";
+import morgan from 'morgan';
 dotenv.config();
 
 export class MainServer {
@@ -22,7 +23,8 @@ export class MainServer {
         this.app.use(express.json({limit: '50mb'}));
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(cookieParser());
-        this.app.use(bodyParser.json());
+      	this.app.use(bodyParser.json());
+	this.app.use(morgan('dev'));
         this.app.use(cors(
             {
                 origin: [process.env.ORIGIN_URL as string],

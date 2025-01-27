@@ -30,7 +30,7 @@ const Filestorage = multer.diskStorage({
     },
 });
 
-const imageUpload = multer({ storage: Imagestorage,
+const imageUpload = multer({limits:{fileSize:50*1024*1024},storage: Imagestorage,
     fileFilter: (req, file, cb) => {
         if (file.mimetype === "image/jpeg" || file.mimetype === "image/png" || file.mimetype === "image/jpg") {
             cb(null, true);
@@ -39,7 +39,7 @@ const imageUpload = multer({ storage: Imagestorage,
         }
     },
  });
-const fileUpload = multer({ storage: Filestorage,
+const fileUpload = multer({limits:{fileSize:50*1024*1024} ,storage: Filestorage,
     fileFilter: (req, file, cb) => {
         if (file.mimetype === "application/pdf") {
             cb(null, true);

@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
     remotePatterns: [
       {
@@ -11,8 +10,9 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
-    domains: ['94.130.59.172'],
+    domains: ['fefven.com', '127.0.0.1'],
   },
 };
 
 export default nextConfig;
+

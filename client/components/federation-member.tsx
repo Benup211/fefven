@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Building, Building2, UsersRound } from "lucide-react"
+import { Building, Building2, UserRoundPen, UsersRound } from "lucide-react"
 import { motion } from "framer-motion"
 import useCountMemberStore from "@/state/admin/count-member-store"
 import { useEffect } from "react"
@@ -45,6 +45,13 @@ export default function FederationsMemberCard() {
       total: Number(cards.district),
       link: "/admin/members/district",
       icon: <UsersRound className="h-6 w-6" />,
+      color: "bg-purple-500",
+    },
+    {
+      title: "Advisory Members",
+      total: Number(cards.advisory),
+      link: "/admin/members/advisory",
+      icon: <UserRoundPen className="h-6 w-6" />,
       color: "bg-purple-500",
     },
   ]

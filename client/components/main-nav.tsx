@@ -25,15 +25,17 @@ const navItems = {
                 { title: "Federation", href: "/member/federation" },
                 { title: "Provincial", href: "/member/province" },
                 { title: "District", href: "/member/district" },
+                { title: "Advisory", href: "/member/advisory" },
             ],
         },
-        {title:"Institutional Members",href:"/organizations"},
-        { title: "About", href: "/about" },
+        { title: "Institutional Members", href: "/organizations" },
+        {title:"Founding Members",href:"/founders"},
         { title: "Resources", href: "/resources" },
         { title: "Events", href: "/events" },
         { title: "Gallery", href: "/gallery" },
         { title: "News", href: "/news" },
         { title: "Contact", href: "/contact" },
+        { title: "About", href: "/about" },
     ],
     ne: [
         { title: "गृहपृष्ठ", href: "/" },
@@ -44,15 +46,17 @@ const navItems = {
                 { title: "महासंघ", href: "/member/federation" },
                 { title: "प्रदेश", href: "/member/province" },
                 { title: "जिल्ला", href: "/member/district" },
+                { title: "सल्लाहकार", href: "/member/advisory" },
             ],
         },
-        {title:"संस्थागत सदस्यहरू",href:"/organizations"},
-        { title: "हाम्रोबारे", href: "/about" },
+        { title: "संस्थागत सदस्यहरू", href: "/organizations" },
+        {title:"संस्थापक सदस्यहरू",href:"/founders"},
         { title: "स्रोतहरू", href: "/resources" },
         { title: "कार्यक्रमहरू", href: "/events" },
         { title: "ग्यालरी", href: "/gallery" },
         { title: "समाचार", href: "/news" },
         { title: "सम्पर्क", href: "/contact" },
+        { title: "हाम्रोबारे", href: "/about" },
     ],
 };
 
@@ -66,7 +70,7 @@ export function MainNav() {
                 {navItems[language].map((item) => (
                     <NavigationMenuItem key={item.href}>
                         {item.subItems ? (
-                            <NavigationMenuTrigger className="bg-transparent hover:bg-transparent hover:text-primary focus:text-primary focus:bg-transparent">
+                            <NavigationMenuTrigger className={cn("bg-transparent hover:bg-transparent hover:text-primary focus:text-primary focus:bg-transparent",language!=="en"?"":"text-xs")}>
                                 {item.title}
                             </NavigationMenuTrigger>
                         ) : (
@@ -76,7 +80,8 @@ export function MainNav() {
                                         "block py-2 px-3 text-sm font-medium transition-colors hover:text-accent",
                                         pathname === item.href
                                             ? "text-accent"
-                                            : "text-foreground"
+                                            : "text-foreground",
+                                        language !== "en" ? "text-sm" : "text-xs"
                                     )}
                                 >
                                     {item.title}

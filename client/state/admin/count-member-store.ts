@@ -3,9 +3,10 @@ import axios, { AxiosError } from "axios";
 import getBackendUrl from "@/lib/get-backend-url";
 import { IErrorResponse } from "@/lib/types";
 interface MemberProps {
-    federation: Number;
-    province: Number;
-    district: Number;
+    federation: number;
+    province: number;
+    district: number;
+    advisory: number;
 }
 
 interface CountMemberStore {
@@ -24,6 +25,7 @@ const useCountMemberStore = create<CountMemberStore>((set) => ({
         federation: 0,
         province: 0,
         district: 0,
+        advisory: 0,
     },
     isLoading: false,
     error: null,

@@ -11,8 +11,9 @@ import {
 import { MainNav } from "@/components/main-nav";
 import { MobileNav } from "@/components/mobile-nav";
 import { useLanguage, languages, Language } from "@/contexts/language-context";
-import { Leaf, ChevronDown } from "lucide-react";
-import { usePathname } from 'next/navigation'
+import { ChevronDown } from "lucide-react";
+import Image from "next/image";
+import { usePathname,useRouter } from 'next/navigation'
 
 
 const organizationName = {
@@ -23,6 +24,7 @@ const organizationName = {
 export function SiteHeader() {
     const { language, setLanguage } = useLanguage();
     const pathname = usePathname()
+    const route=useRouter()
 
     if (pathname.startsWith('/admin')) return null;
 
@@ -30,7 +32,7 @@ export function SiteHeader() {
         <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-16 items-center">
                 <Link href="/" className="flex items-center space-x-2 mr-6">
-                    <Leaf className="h-6 w-6 text-primary" />
+                    <Image src="/fefven.png" width={48} height={48} alt="fefven icon" />
                     <span className="font-bold text-xl text-primary">
                         {organizationName[language]}
                     </span>
@@ -68,6 +70,7 @@ export function SiteHeader() {
                             variant="default"
                             size="sm"
                             className="bg-accent text-accent-foreground hover:bg-accent/90"
+                            onClick={()=>{route.push('/contact')}}
                         >
                             {language === "en"
                                 ? "Contact Us"

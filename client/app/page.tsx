@@ -12,6 +12,7 @@ import { CarouselItem } from '@/components/home/carousel-item'
 import { ResourceSection } from '@/components/home/resource-section'
 import { NewsSection } from '@/components/home/news-section'
 import Link from 'next/link'
+import { FlashCard } from '@/components/home/flash-card'
 
 const features = {
   en: [
@@ -66,6 +67,7 @@ export default function Home() {
   const { language } = useLanguage()
   return (
     <div className="flex flex-col min-h-screen">
+      <FlashCard/>
       {/* Hero Slider Section */}
       <CarouselItem/>
       {/* Features Section */}

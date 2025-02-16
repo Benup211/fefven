@@ -4,19 +4,21 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { LayoutDashboard, CalendarDays, Users, FileText, LogOut, X, Newspaper, Image,Images, Loader2, Landmark } from 'lucide-react'
+import { LayoutDashboard, CalendarDays, Users, FileText, LogOut, X, Newspaper, Image,Images, Loader2, Landmark, BookUser } from 'lucide-react'
 import useAuthStore from '@/state/admin/login-store'
 import { toast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
 
 const sidebarItems = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  {name:'Flash News', href:'/admin/flashnews', icon:Newspaper},
   {name:'Carousel' , href:'/admin/carousel', icon:Images},
   { name: 'Events', href: '/admin/events', icon: CalendarDays },
   { name: 'News', href: '/admin/news', icon: Newspaper },
   { name: 'Gallery', href: '/admin/gallery', icon: Image },
   { name: 'Members', href: '/admin/members', icon: Users },
   { name: 'Resources', href: '/admin/resources', icon: FileText },
+  {name:'Founding Members', href:'/admin/foundary-organization', icon:BookUser},
   {name:'Institutional Members', href:'/admin/organization', icon:Landmark},
 ]
 

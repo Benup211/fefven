@@ -8,3 +8,7 @@ export * from './province-member.repository'
 export * from './district-member.repository'
 export * from "./organization.repository"
 export * from "./organization-member.repository"
+export * from "./advisory-member.repository"
+export * from "./foundary-organization.repository"
+export * from "./foundary-organization-member.repository"
+export * from "./flash-news.repository"

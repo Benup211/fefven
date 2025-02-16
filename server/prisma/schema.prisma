@@ -109,6 +109,15 @@ model DistrictMember {
   district            String
 }
 
+model AdvisoryMember {
+  id                  Int    @id @default(autoincrement())
+  name                String
+  imageUrl            String
+  contactNo           String
+  designation         String
+  designationPriority Int
+}
+
 model Organization {
   id            Int                  @id @default(autoincrement())
   name          String
@@ -126,3 +135,27 @@ model OrganizationMember {
   organization        Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 }
 
+model FoundaryOrganization {
+  id            Int                  @id @default(autoincrement())
+  name          String
+  establishedAt String
+  FoundaryMember FoundaryMember[]
+}
+
+model FoundaryMember{
+  id                  Int          @id @default(autoincrement())
+  name                String
+  contactNo           String
+  designation         String
+  designationPriority Int
+  organizationId      Int
+  organization        FoundaryOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model flashNews {
+  id          Int      @id @default(autoincrement())
+  title       String
+  imageUrl    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

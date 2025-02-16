@@ -9,3 +9,7 @@ export * from './province-member.validator';
 export * from './district-member.validator';
 export * from './organization.validator';
 export * from './organization-member.validator';
+export * from './advisory-member.validator';
+export * from './foundary-organization.validator';
+export * from './foundary-organization-member.validator';
+export * from "./flash-news.validator"

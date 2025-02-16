@@ -1,4 +1,4 @@
-import { FederationMemberRepository,ProvinceMemberRepository,DistrictMemberRepository } from "../repository";
+import { FederationMemberRepository,ProvinceMemberRepository,DistrictMemberRepository,AdvisoryMemberRepository } from "../repository";
 import { Request, Response, NextFunction } from "express";
 import { ResponseService} from "../services";
 export class MemberController {
@@ -8,7 +8,8 @@ export class MemberController {
             const federation= await FederationMemberRepository.lengthOfFederationMember();
             const province = await ProvinceMemberRepository.lengthOfProvinceMember();
             const district = await DistrictMemberRepository.lengthOfDistrictMember();
-            return ResponseService.CreateSuccessResponse({federation,province,district},200,res);
+            const advisory= await AdvisoryMemberRepository.lengthOfAdvisoryMember();
+            return ResponseService.CreateSuccessResponse({federation,province,district,advisory},200,res);
         }catch (e){
             next(e);
         }

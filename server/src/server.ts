@@ -16,7 +16,11 @@ import {
     DistrictMemberRoutes, 
     MemberRoutes, 
     OrganizationRoutes, 
-    OrganizationMemberRoutes 
+    OrganizationMemberRoutes,
+    AdvisoryMemberRoutes,
+    FoundaryOrganizationRoutes,
+    FoundaryOrganizationMemberRoutes,
+    FlashNewsRoutes
 } from "./routes";
 import dotenv from "dotenv";
 import path from "path";
@@ -34,10 +38,7 @@ export class MainServer {
     }
 
     async setConfiguration() {
-        this.app.set('trust proxy', true); // Trust the reverse proxy (NGINX)
-
-        // No need for HTTPS redirection as NGINX handles it
-
+        this.app.set('trust proxy', true);
         this.app.use(express.json({ limit: '50mb' }));
         this.app.use(express.urlencoded({ extended: true, limit: '50mb' }));
         this.app.use(cookieParser());
@@ -46,8 +47,6 @@ export class MainServer {
             origin: [process.env.ORIGIN_URL as string],
             credentials: true,
         }));
-
-        // Serve static files from the uploads directory
         this.app.use(
             "/uploads",
             express.static(path.join(__dirname, "../uploads"))
@@ -65,9 +64,13 @@ export class MainServer {
         this.app.use("/api/federation-member", FederationMemberRoutes);
         this.app.use("/api/province-member", ProvinceMemberRoutes);
         this.app.use("/api/district-member", DistrictMemberRoutes);
+        this.app.use("/api/advisory-member", AdvisoryMemberRoutes);
         this.app.use("/api/member", MemberRoutes);
         this.app.use("/api/organization", OrganizationRoutes);
         this.app.use("/api/organization-member", OrganizationMemberRoutes);
+        this.app.use("/api/foundary-organization", FoundaryOrganizationRoutes);
+        this.app.use("/api/foundary-organization-member", FoundaryOrganizationMemberRoutes);
+        this.app.use("/api/flash-news", FlashNewsRoutes);
     }
 
     handle404Error() {
